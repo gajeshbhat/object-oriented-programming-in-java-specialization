@@ -2,6 +2,7 @@ package guiexperiments;
 
 
 import java.awt.Color;
+
 import java.util.List;
 
 import de.fhpotsdam.unfolding.UnfoldingMap;
@@ -14,6 +15,10 @@ import de.fhpotsdam.unfolding.utils.MapUtils;
 import processing.core.PApplet;
 import parsing.ParseFeed;
 import java.util.ArrayList;
+
+import module4.EarthquakeCityMap;
+import module4.EarthquakeCityMap.*;
+
 public class EarthquakeMarker extends PApplet {
 
 	/**
@@ -62,9 +67,11 @@ public class EarthquakeMarker extends PApplet {
 	// Gets the final marker i.e driver for other getters and setters of marker and its properties.
 	
 	public SimplePointMarker getquakeLocationMapMarker(PointFeature pointFeature) {
+		
 		SimplePointMarker earthquakeLocationMarker = this.getquakeLocationMarker(pointFeature.location);
 		float ritcherMagnitude = (float) pointFeature.getProperties().values().toArray()[1];
-		println(ritcherMagnitude);
+		
+		
 		if(ritcherMagnitude >= EXTREEME) {
 			setMarkerColorRed(earthquakeLocationMarker);
 		}
@@ -77,6 +84,9 @@ public class EarthquakeMarker extends PApplet {
 		else {
 			setMarkerColorGrey(earthquakeLocationMarker);
 		}
+		
+		
+		
 		return earthquakeLocationMarker;
 	}
 	

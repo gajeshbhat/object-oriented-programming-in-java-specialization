@@ -30,6 +30,12 @@ public class OceanQuakeMarker extends EarthquakeMarker {
 		// and how it is set in the EarthquakeMarker constructor
 		
 		// TODO: Implement this method
+		pg.rect(x, y, super.radius+5, super.radius+5);
+		if(isQuakeYesterday()) {
+			pg.fill(0);
+			pg.text('X', x-4, y+4);
+			pg.textSize(15);
+		}
 		
 	}
 	

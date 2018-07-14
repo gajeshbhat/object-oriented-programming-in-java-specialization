@@ -1,8 +1,11 @@
 package module4;
 
+import java.awt.Color;
 import de.fhpotsdam.unfolding.data.PointFeature;
 import de.fhpotsdam.unfolding.marker.SimplePointMarker;
 import processing.core.PGraphics;
+
+
 
 /** Implements a visual marker for earthquakes on an earthquake map
  * 
@@ -37,10 +40,19 @@ public abstract class EarthquakeMarker extends SimplePointMarker
 	public static final float THRESHOLD_DEEP = 300;
 
 	// ADD constants for colors
+	private static float EXTREEME = (float)300.0;
+	private static float DANGER = (float)70.00;
+	private static float MANAGEABLE = (float)70.0;
+	private static Color YELLOW = new Color(255, 209, 0);
+	private static Color RED = new Color(252, 4, 4);
+	private static Color BLUE = new Color(71, 83, 255);
+	private static Color GREY = new Color(218, 218, 218);
 
+	PointFeature featureValue = new PointFeature();
 	
 	// abstract method implemented in derived classes
 	public abstract void drawEarthquake(PGraphics pg, float x, float y);
+	
 		
 	
 	// constructor
@@ -53,6 +65,8 @@ public abstract class EarthquakeMarker extends SimplePointMarker
 		properties.put("radius", 2*magnitude );
 		setProperties(properties);
 		this.radius = 1.75f*getMagnitude();
+		this.featureValue = feature;
+		
 	}
 	
 
@@ -67,8 +81,12 @@ public abstract class EarthquakeMarker extends SimplePointMarker
 		// call abstract method implemented in child class to draw marker shape
 		drawEarthquake(pg, x, y);
 		
-		// OPTIONAL TODO: draw X over marker if within past day		
+		pg.pushStyle();
 		
+		// OPTIONAL TODO: draw X over marker if within past day
+		
+		pg.pushStyle();
+	
 		// reset to previous styling
 		pg.popStyle();
 		
@@ -80,10 +98,32 @@ public abstract class EarthquakeMarker extends SimplePointMarker
 	// But this is up to you, of course.
 	// You might find the getters below helpful.
 	private void colorDetermine(PGraphics pg) {
-		//TODO: Implement this method
+		
+		float ritcherMagnitude = getDepth();
+		
+		if(ritcherMagnitude >= EXTREEME) {
+    		pg.fill(RED.hashCode());
+		}
+		else if(ritcherMagnitude >= DANGER && ritcherMagnitude < EXTREEME) {
+			pg.fill(YELLOW.hashCode());
+		}
+		else if(ritcherMagnitude <= MANAGEABLE ) {
+			pg.fill(BLUE.hashCode());
+		}
+		else {
+			pg.fill(GREY.hashCode());
+		}
+		
 	}
 	
-	
+
+	public boolean isQuakeYesterday() {
+		String quakeOccuranceTime = featureValue.getProperty("age").toString();
+		if (quakeOccuranceTime.equals("Past Day")) {
+			return true;
+		}
+		return false;
+	}
 	/*
 	 * getters for earthquake properties
 	 */
