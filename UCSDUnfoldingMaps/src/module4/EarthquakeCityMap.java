@@ -82,8 +82,8 @@ public class EarthquakeCityMap extends PApplet {
 		//earthquakesURL = "test2.atom";
 		
 		// WHEN TAKING THIS QUIZ: Uncomment the next line
-		//earthquakesURL = "quiz1.atom";
-		
+		earthquakesURL = "quiz1.atom";
+		int totalOceanQuakes = 0;
 		
 		// (2) Reading in earthquake data and geometric properties
 	    //     STEP 1: load country features and markers
@@ -109,10 +109,11 @@ public class EarthquakeCityMap extends PApplet {
 		  // OceanQuakes
 		  else {
 		    quakeMarkers.add(new OceanQuakeMarker(feature));
+		    totalOceanQuakes+=1;
 		  }
 	    }
 	    
-	    
+	    System.out.print(totalOceanQuakes);
 	    // could be used for debugging
 	    printQuakes();
 	 		
@@ -227,7 +228,7 @@ public class EarthquakeCityMap extends PApplet {
 	private boolean isInCountry(PointFeature earthquake, Marker country) {
 		// getting location of feature
 		Location checkLoc = earthquake.getLocation();
-
+		int totalUSQuakesCount = 0;
 		// some countries represented it as MultiMarker
 		// looping over SimplePolygonMarkers which make them up to use isInsideByLoc
 		if(country.getClass() == MultiMarker.class) {
@@ -238,17 +239,19 @@ public class EarthquakeCityMap extends PApplet {
 				// checking if inside
 				if(((AbstractShapeMarker)marker).isInsideByLocation(checkLoc)) {
 					earthquake.addProperty("country", country.getProperty("name"));
-						
+					if(country.getProperty("name").toString().equals("United States")) {
+						totalUSQuakesCount+=1;
+					}
 					// return if is inside one
 					return true;
 				}
 			}
+			System.out.print(totalUSQuakesCount);
 		}
 			
 		// check if inside country represented by SimplePolygonMarker
 		else if(((AbstractShapeMarker)country).isInsideByLocation(checkLoc)) {
 			earthquake.addProperty("country", country.getProperty("name"));
-			
 			return true;
 		}
 		return false;
