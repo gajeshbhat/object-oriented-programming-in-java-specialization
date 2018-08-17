@@ -1,6 +1,10 @@
 package document;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /** 
  * A naive implementation of the Document abstract class. 
@@ -12,6 +16,9 @@ public class BasicDocument extends Document
 	 * 
 	 * @param text The full text of the Document.
 	 */
+	private static String WORDREGEX = "[a-zA-Z]+";
+	private static String SENTENCEREGEX = "[^.!?]+";
+	
 	public BasicDocument(String text)
 	{
 		super(text);
@@ -36,7 +43,8 @@ public class BasicDocument extends Document
 	{
 		//TODO: Implement this method in week 2 according to the comments above.  
 		// See the Module 2 support videos if you need help.
-	    return 0;
+		List<String> wordTokens = getTokens(WORDREGEX);
+	    return wordTokens.size();
 	}
 	
 	/**
@@ -54,9 +62,8 @@ public class BasicDocument extends Document
 	@Override
 	public int getNumSentences()
 	{
-	    //TODO: Implement this method.  See the Module 2 support videos 
-        // if you need help.
-        return 0;
+		List<String> sentenceTokens = getTokens(SENTENCEREGEX);
+	    return sentenceTokens.size();
 	}
 	
 	/**
@@ -81,7 +88,15 @@ public class BasicDocument extends Document
 		// expression for the syllable counting.  We recommend you implement 
 		// the helper function countSyllables in Document.java using a loop, 
 		// and then call it here on each word.
-        return 0;
+		
+		List<String> documentWords = getTokens(WORDREGEX);
+		int totalSyllableNum = 0;
+	
+		for (String word : documentWords) {
+			totalSyllableNum += (int) super.countSyllables(word);
+		}
+		
+        return totalSyllableNum;
 	}
 	
 	
