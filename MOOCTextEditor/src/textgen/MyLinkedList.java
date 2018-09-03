@@ -31,13 +31,17 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	 */
 	public boolean add(E element ) 
 	{
+		if(element == null) {
+			throw new NullPointerException();
+		}
+		
 		if(isElementNull(this.head)) {
 			// For first element
 			LLNode<E> singleElement = new LLNode<E>(element);
 			head = singleElement;
 			tail = singleElement;
 			
-			singleElement.prev = this.head;
+			singleElement.prev = head;
 			singleElement.next = null;
 			size++;
 		}
@@ -45,10 +49,10 @@ public class MyLinkedList<E> extends AbstractList<E> {
 			// other elements
 			LLNode<E> singleElement = new LLNode<E>(element);
 			
-			singleElement.prev = this.tail;
-			this.tail = singleElement;
+			singleElement.prev = tail;
 			singleElement.prev.next = singleElement;
 			singleElement.next = null;
+			tail = singleElement;
 			size++;
 		}
 		return true;
@@ -58,11 +62,11 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	 * @throws IndexOutOfBoundsException if the index is out of bounds. */
 	public E get(int index) 
 	{	
-		if(index < 0 || index > this.size - 1 ) {
-			throw new IndexOutOfBoundsException("Index out of bounds!");
+		if(index < 0 || index > size - 1 ) {
+			throw new IndexOutOfBoundsException();
 		}
 		
-		LLNode<E> startReference = this.head;
+		LLNode<E> startReference = head;
 		
 		int indexTracker = 0;
 		while(indexTracker < index) {
@@ -75,11 +79,7 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	
 	public LLNode<E> getRefrence(int index) 
 	{
-		if(index < 0 || index > this.size - 1 ) {
-			throw new IndexOutOfBoundsException("Index out of bounds!");
-		}
-		
-		LLNode<E> startReference = this.head;
+		LLNode<E> startReference = head;
 		
 		int indexTracker = 0;
 		while(indexTracker < index) {
@@ -96,15 +96,58 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	 */
 	public void add(int index, E element ) 
 	{
+		if(index < 0 ) {
+			throw new IndexOutOfBoundsException();
+		}
 		
+		if(element == null) {
+			throw new NullPointerException();
+		}
 		
+		if(index == 0) {
+			if(size == 0) {
+				LLNode<E> singleElement = new LLNode<E>(element);
+				head = singleElement;
+				tail = singleElement;
+				
+				singleElement.prev = head;
+				singleElement.next = null;
+				size++;
+			}
+			else {
+				LLNode<E> linkNode = new LLNode<E>(element);
+				linkNode.prev = null;
+				linkNode.next = head;
+				linkNode.next.prev = linkNode;
+				head = linkNode;
+				
+			}
+		}
+		else {
+			LLNode<E> startReference = head;
+			
+			int indexTracker = 0;
+			while(indexTracker < index) {
+				startReference = startReference.next;
+				indexTracker++;
+			}
+			LLNode<E> linkNode = new LLNode<E>(element);
+			linkNode.prev = startReference.prev;
+			linkNode.next = startReference;
+			startReference.prev.next = linkNode;
+			startReference.prev = linkNode;
+			if(index == size-1) {
+				tail = linkNode;
+			}
+		}
+		
+		size += 1;
 	}
-
 
 	/** Return the size of the list */
 	public int size() 
 	{
-		return this.size;
+		return size;
 	}
 
 	/** Remove a node at the specified index and return its data element.
@@ -116,18 +159,25 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	public E remove(int index) 
 	{
 		if(index < 0 || index > size-1) {
-			throw new IndexOutOfBoundsException("Index Out of bounds!");
+			throw new IndexOutOfBoundsException();
 		}
+		
 		LLNode<E>  currentElement = getRefrence(index);
 		if(currentElement == head) {
 			head = currentElement.next;
-			tail =null;
+			tail = null;
 		}
 		else {
 		currentElement.next.prev = currentElement.prev;
 		currentElement.prev.next = currentElement.next;
 		}
-		size--;
+		
+		if(index == size-1 && currentElement!=head) {
+			tail = currentElement.prev;
+			currentElement.prev.next = null;
+		}
+		
+		size -= 1;
 		return currentElement.data;
 	}
 
@@ -141,7 +191,23 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	public E set(int index, E element) 
 	{
 		// TODO: Implement this method
-		return null;
+		if(index < 0 || index > this.size - 1 ) {
+			throw new IndexOutOfBoundsException();
+		}
+		
+		if(element == null) {
+			throw new NullPointerException();
+		}
+		
+		LLNode<E> startReference = head;
+		
+		int indexTracker = 0;
+		while(indexTracker < index) {
+			startReference = startReference.next;
+			indexTracker++;
+		}
+		startReference.data = element;
+		return startReference.data;
 	}   
 }
 
