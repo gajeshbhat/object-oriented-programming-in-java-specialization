@@ -104,41 +104,21 @@ public class MyLinkedList<E> extends AbstractList<E> {
 			throw new NullPointerException();
 		}
 		
-		if(index == 0) {
-			if(size == 0) {
-				LLNode<E> singleElement = new LLNode<E>(element);
-				head = singleElement;
-				tail = singleElement;
-				
-				singleElement.prev = head;
-				singleElement.next = null;
-				size++;
-			}
-			else {
-				LLNode<E> linkNode = new LLNode<E>(element);
-				linkNode.prev = null;
-				linkNode.next = head;
-				linkNode.next.prev = linkNode;
-				head = linkNode;
-				
-			}
+		if(isElementNull(head)) {
+			//First Element
+			LLNode<E> singleElement = new LLNode<E>(element);
+			head = singleElement;
+			tail = singleElement;
 		}
 		else {
-			LLNode<E> startReference = head;
+			LLNode<E> refrenceNode = getRefrence(index);
+			LLNode<E> singleElement = new LLNode<E>(element);
 			
-			int indexTracker = 0;
-			while(indexTracker < index) {
-				startReference = startReference.next;
-				indexTracker++;
-			}
-			LLNode<E> linkNode = new LLNode<E>(element);
-			linkNode.prev = startReference.prev;
-			linkNode.next = startReference;
-			startReference.prev.next = linkNode;
-			startReference.prev = linkNode;
-			if(index == size-1) {
-				tail = linkNode;
-			}
+			singleElement.prev = refrenceNode.prev;
+			singleElement.next = refrenceNode;
+			
+			refrenceNode.prev.next = singleElement;
+			refrenceNode.prev = singleElement;
 		}
 		
 		size += 1;
@@ -162,23 +142,30 @@ public class MyLinkedList<E> extends AbstractList<E> {
 			throw new IndexOutOfBoundsException();
 		}
 		
-		LLNode<E>  currentElement = getRefrence(index);
-		if(currentElement == head) {
-			head = currentElement.next;
-			tail = null;
+		LLNode<E>  currentNode = getRefrence(index);
+		
+		if(index == 0) {
+			// Only one element
+			if(currentNode.next == null) {
+				head = tail = null;
+			}
+			else {
+				head = currentNode.next;
+				currentNode.prev = null;
+			}
+		}
+		else if(index == size-1) {
+			// Last element
+			currentNode.prev.next = null;
+			tail = currentNode.prev;
 		}
 		else {
-		currentElement.next.prev = currentElement.prev;
-		currentElement.prev.next = currentElement.next;
-		}
-		
-		if(index == size-1 && currentElement!=head) {
-			tail = currentElement.prev;
-			currentElement.prev.next = null;
+			currentNode.prev.next = currentNode.next.prev;
+			currentNode.next.prev = currentNode.prev;
 		}
 		
 		size -= 1;
-		return currentElement.data;
+		return currentNode.data;
 	}
 
 	/**

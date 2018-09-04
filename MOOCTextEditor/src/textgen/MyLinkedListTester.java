@@ -21,6 +21,7 @@ public class MyLinkedListTester {
 	MyLinkedList<Integer> emptyList;
 	MyLinkedList<Integer> longerList;
 	MyLinkedList<Integer> list1;
+	MyLinkedList<Integer> lst;
 	
 	/**
 	 * @throws java.lang.Exception
@@ -28,7 +29,8 @@ public class MyLinkedListTester {
 	@Before
 	public void setUp() throws Exception {
 		// Feel free to use these lists, or add your own
-	    shortList = new MyLinkedList<>();
+		lst = new MyLinkedList<Integer>();
+		shortList = new MyLinkedList<>();
 		shortList.add("A");
 		shortList.add("B");
 		emptyList = new MyLinkedList<>();
@@ -145,8 +147,8 @@ public class MyLinkedListTester {
 		assertEquals("Add: did not return true", true, result);
 		assertEquals("Add: size should be 4", 4, list1.size());
 		assertEquals("Add: Element 0 should be 65", (Integer)65, list1.get(0));
+		
 	}
-
 	
 	/** Test the size of the list */
 	@Test
@@ -204,6 +206,10 @@ public class MyLinkedListTester {
 		emptyList.add(0, 5);
 		assertEquals("AddIndex: Index 0 should be 5", (Integer)5, emptyList.get(0));
 		assertEquals("AddIndex: Size should be 1", 1, emptyList.size());
+		
+		lst.add(0, 1);
+		lst.remove(0);
+		lst.add(0, 1);
 	}
 	
 	/** Test setting an element in the list */
@@ -234,6 +240,5 @@ public class MyLinkedListTester {
 		int old = list1.set(1, 100);
 		assertEquals("Set: Check element 1", (Integer)100, list1.get(1));
 		assertEquals("Set: Check element removed", 21, old);
-	}
-	
+	}	
 }
