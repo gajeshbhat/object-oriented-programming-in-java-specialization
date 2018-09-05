@@ -45,7 +45,7 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	
 	/** 
 	 * Return the number of words in the dictionary.  This is NOT necessarily the same
-	 * as the number of TrieNodes in the trie.
+	 * as the number of TrieNodes in the trie
 	 */
 	public int size()
 	{
