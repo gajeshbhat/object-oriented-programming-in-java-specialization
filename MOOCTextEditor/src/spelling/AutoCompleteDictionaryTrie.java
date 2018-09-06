@@ -1,10 +1,6 @@
 package spelling;
 
 import java.util.List;
-import java.util.Set;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
 
 /** 
  * An trie data structure that implements the Dictionary and the AutoComplete ADT
@@ -14,8 +10,7 @@ import java.util.LinkedList;
 public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 
     private TrieNode root;
-    private int size;
-    
+    private int size = 0;
 
     public AutoCompleteDictionaryTrie()
 	{
@@ -39,8 +34,33 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	 */
 	public boolean addWord(String word)
 	{
-	    //TODO: Implement this method.
-	    return false;
+		if(word.isEmpty()) {
+			return false;
+		}
+		
+		String loweCaseWord = word.toLowerCase();
+		TrieNode trackerNode = root; // Start from the root
+		
+		for (int i = 0; i < loweCaseWord.length(); i++) {
+				Character letterOfWord = loweCaseWord.charAt(i);
+				TrieNode trackerNodeNext = trackerNode.getChild(letterOfWord);
+				
+				if(trackerNodeNext == null) {
+					trackerNode = trackerNode.insert(letterOfWord);	
+				}
+				else {
+						trackerNode = trackerNodeNext;
+				}
+				
+				}
+	
+		if(trackerNode.endsWord()) {
+			return false;
+		}
+		
+		trackerNode.setEndsWord(true);
+		size++;
+		return true;
 	}
 	
 	/** 
@@ -49,8 +69,7 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	 */
 	public int size()
 	{
-	    //TODO: Implement this method
-	    return 0;
+	    return size;
 	}
 	
 	
@@ -59,8 +78,22 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	@Override
 	public boolean isWord(String s) 
 	{
-	    // TODO: Implement this method
-		return false;
+		String loweCaseWord = s.toLowerCase();
+		TrieNode trackerNode = root; // Start from the root
+		
+		for (int i = 0; i < loweCaseWord.length(); i++) {
+				Character letterOfWord = loweCaseWord.charAt(i);
+				TrieNode trackerNodeNext = trackerNode.getChild(letterOfWord);
+				
+				if(trackerNodeNext == null) {
+					return false;	
+				}
+				else {
+						trackerNode = trackerNodeNext;
+				}
+				
+			}
+		return trackerNode.endsWord();
 	}
 
 	/** 
