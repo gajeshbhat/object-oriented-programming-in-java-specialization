@@ -89,7 +89,7 @@ public class AutoCompleteDictionaryTrieTester {
 	public void testAddWord()
 	{
 		
-		
+		smallDict.printTree();
 		assertEquals("Asserting hellow is not in empty dict", false, emptyDict.isWord("hellow"));
 		assertEquals("Asserting hellow is not in small dict", false, smallDict.isWord("hellow"));
 		assertEquals("Asserting hellow is not in large dict", false, largeDict.isWord("hellow"));
@@ -126,7 +126,6 @@ public class AutoCompleteDictionaryTrieTester {
 		assertEquals("Testing isWord on small: subsequent", true, smallDict.isWord("subsequent"));
 		assertEquals("Testing isWord on large: subsequent", true, largeDict.isWord("subsequent"));
 		
-		
 	}
 	
 	@Test
@@ -135,7 +134,7 @@ public class AutoCompleteDictionaryTrieTester {
 		List<String> completions;
 		completions = smallDict.predictCompletions("", 0);
 		assertEquals(0, completions.size());
-		
+		smallDict.printTree();
 		completions = smallDict.predictCompletions("",  4);
 		assertEquals(4, completions.size());
 		assertTrue(completions.contains("a"));

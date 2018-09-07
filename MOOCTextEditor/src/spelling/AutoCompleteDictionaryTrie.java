@@ -1,6 +1,10 @@
 package spelling;
 
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
+import java.util.Set;
 
 /** 
  * An trie data structure that implements the Dictionary and the AutoComplete ADT
@@ -134,10 +138,41 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
     	 //       Add all of its child nodes to the back of the queue
     	 // Return the list of completions
     	 
-         return null;
+    	 List<String>predictionWords = new LinkedList<String>();
+    	 TrieNode wordNode = getWordNode(root,prefix);
+    	 
+    	 if(wordNode == null) {
+    		 return predictionWords;
+    	 }
+    	 
+    	 Queue<TrieNode> toExplore = new LinkedList<>();
+ 		 toExplore.add(wordNode);
+ 		 
+ 		 while(predictionWords.size() < numCompletions && !(toExplore.isEmpty())) {
+ 			TrieNode currentNode = toExplore.remove();
+ 			
+ 			if(currentNode.endsWord()) {
+ 				predictionWords.add(currentNode.getText());
+ 			}
+ 			
+ 			for(Character c : currentNode.getValidNextCharacters()) {
+ 				TrieNode subChild = currentNode.getChild(c);
+ 				if(subChild != null) {
+ 					toExplore.add(subChild);
+ 				}
+ 			}
+ 		 }
+ 		 return predictionWords;	
      }
+ 	
+     private TrieNode getWordNode(TrieNode node, String key) {
+    	 if (node == null || key.isEmpty())
+ 			return node;
 
- 	// For debugging
+ 		return getWordNode(node.getChild(key.charAt(0)), key.substring(1));
+     }
+     
+     // For debugging
  	public void printTree()
  	{
  		printNode(root);
