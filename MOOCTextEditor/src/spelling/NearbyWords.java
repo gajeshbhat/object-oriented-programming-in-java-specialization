@@ -5,6 +5,7 @@ package spelling;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -91,7 +92,6 @@ public class NearbyWords implements SpellingSuggest {
 						(!wordsOnly||dict.isWord(sb.toString())) &&
 						!s.equals(sb.toString())) {
 					currentList.add(sb.toString());
-					System.out.println(sb);
 				}
 				
 			}
@@ -151,6 +151,22 @@ public class NearbyWords implements SpellingSuggest {
 		visited.add(word);
 					
 		// TODO: Implement the remainder of this method, see assignment for algorithm
+		while(queue.size() > 0 && retList.size() < numSuggestions) {
+			String currElement = queue.remove(0);
+			List<String> distanceOneList = distanceOne(currElement, false);
+			for (Iterator<String> iterator = distanceOneList.iterator(); iterator.hasNext();) {
+				String wordInDist = (String) iterator.next();
+				if(!visited.contains(wordInDist)) {
+					visited.add(wordInDist);
+					queue.add(wordInDist);
+					if(dict.isWord(wordInDist)) {
+						retList.add(wordInDist);
+					}
+				}
+				
+			}
+			
+		}
 		
 		return retList;
 
